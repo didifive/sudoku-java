@@ -74,6 +74,9 @@ Abaixo seguem as instruções para executar o projeto com o banco de dados SQLit
 
 
 
+---
+Criado com paixão, dedicação e o compromisso sincero de compartilhar conhecimento 🧑‍💻❤️🤝📚
+
 
 [DIO]: https://www.dio.me/sign-up?ref=WQ0TRWQ8E1
 [TONNIE - Java and AI in Europe]: https://www.dio.me/bootcamp/tonnie-java-and-ai-europe?ref=WQ0TRWQ8E1

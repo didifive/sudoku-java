@@ -33,7 +33,7 @@ public class RascunhoDotsPanel extends JPanel {
         dot = Math.max(4, dot);
 
         Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(Color.RED);
+        g2.setColor(new Color(255, 0, 0, 120));
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         for (int n = 1; n <= 9; n++) {
@@ -42,7 +42,7 @@ public class RascunhoDotsPanel extends JPanel {
                 int col = (n - 1) % 3;
                 int cx = col * cellW + cellW / 2;
                 int cy = row * cellH + cellH / 2;
-                g2.fillOval(cx - dot / 2, cy - dot / 2, dot, dot);
+                g2.fillRect(cx - dot / 2, cy - dot / 2, dot, dot);
             }
         }
     }
