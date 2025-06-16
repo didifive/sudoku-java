@@ -1,6 +1,6 @@
-# Desafio de Projeto - Sudoku
+# 🧩 Desafio de Projeto - Sudoku
 
-## Objetivo
+## 🎯 Objetivo
 
 O objetivo é criar um jogo de Sudoku em Java, que permita ao usuário interagir com o jogo através de um menu. 
 O jogo deve ser capaz de iniciar com um tabuleiro pré-definido, permitir a inserção e remoção de números, verificar 
@@ -9,15 +9,15 @@ o estado do jogo e fornecer feedback sobre erros.
 *Esse projeto foi criado com base no desafio de projeto "Criando um Ebook com ChatGPT & MidJourney" do bootcamp
 [TONNIE - Java and AI in Europe] na [DIO]*
 
-## Tecnologias Utilizadas
+## 🛠️ Tecnologias Utilizadas
 - Java 21
 - Swing (para interface gráfica)
 - SQLite
 
-### Desafio
+### 🚀 Desafio
 Descrição completa do Desafio: [Desafio Sudoku Java]
 
-#### Requisitos
+#### 📋 Requisitos
 Deve-se ter um menu interativo onde poderemos escolher entre as seguintes opções:
 1. Iniciar um novo o jogo: Deve-se exibir na tela o jogo inicial, com os espaços preenchidos somente pelos números iniciais (usar os args do método main para informar os números iniciais e suas devidas posiçõers);
 2. Colocar um novo número: Deve-se solicitar as seguintes informações do jogador (número a ser colocado, indice horizontal e indice vertical do número), não se deve permitir que seja colocado um número em uma posição que já esteja preenchida ( seja número fixo ou informado pelo jogador);
@@ -27,32 +27,32 @@ Deve-se ter um menu interativo onde poderemos escolher entre as seguintes opçõ
 6. Limpar: remove todos os números informados pelo usuário e mantém os fixos do jogo;
 7. finalizar o jogo: Se o jogo estiver com todos os espaços preenchidos de forma válida o jogo é encerrado, senão informar ao usuário que ele deve preencher todos os espaços com seus respectivos números;
 
-#### Extras (requisitos opcionais)
+#### ✨ Extras (requisitos opcionais)
 1. Usar algum ambiente gráfico ( AWT, Swing) para criação do jogo
 2. ter a opção de colocar números de rascunho nos quadrados, para isso deve-se seguir o modelo proposto na sessão modelo de rascunho
 
-##### Modelo com números
+##### 🧮 Modelo com números
 ![Sudoku](docs/images/sudoku.png)
 
-##### Modelo de rascunho
+##### 📝 Modelo de rascunho
 ![rascunho](docs/images/draft.png)
 
-## Visuais
+## 🖼️ Visuais
 
-### Diagrama de Classes
+### 📐 Diagrama de Classes
 ![Diagrama de Classes](docs/images/class-diagram.png)  
 O diagrama de classes acima representa a estrutura do projeto, incluindo as principais classes e suas relações.
 Ele foi gerado utilizando o plugin do IntelliJ IDEA "PlantUML Integration" e o arquivo `class-diagram.puml` localizado na pasta `docs/diagrams`.
 
-## Executar o projeto com o Banco de Dados (SQLite)
+## 💾 Executar o projeto com o Banco de Dados (SQLite)
 
 Abaixo seguem as instruções para executar o projeto com o banco de dados SQLite usando o JetBrains IntelliJ IDEA ou via terminal com a lib `sqlite-jdbc-3.50.1.0.jar`.
 
-### Passos para execução
+### 🏁 Passos para execução
 1. **Clone o repositório**  
    Clone o repositório do projeto para sua máquina local:
    ```sh
-   git clone TODO: URL do repositório
+   git clone https://github.com/didifive/sudoku-java
    ``` 
 2. **Abra o projeto no IntelliJ IDEA ou execute via terminal.**
    - **No IntelliJ IDEA**
