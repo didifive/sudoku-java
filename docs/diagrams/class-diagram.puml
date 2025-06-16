@@ -1,0 +1,113 @@
+@startuml
+enum StatusJogoEnum {
+    NAO_INICIADO
+    INCOMPLETO
+    COMPLETO
+}
+
+class Jogo {
+    - tabuleiro: Tabuleiro
+    - jogador: Jogador
+    - status: StatusJogoEnum
+    - erros: int
+    - modoRascunho: boolean
+    + iniciar(args: String[]): void
+    + colocarNumero(linha: int, coluna: int, valor: int): boolean
+    + removerNumero(linha: int, coluna: int): boolean
+    + verificarJogo(): void
+    + verificarStatus(): StatusJogoEnum
+    + limpar(): void
+    + finalizar(): boolean
+    + getErros(): int
+    + incrementarErro(): void
+    + isModoRascunho(): boolean
+    + setModoRascunho(boolean): void
+    + addJogoEventListener(event: JogoEventEnum, listener: JogoEventListener): void
+}
+
+class Tabuleiro {
+    - celulas: List<List<Celula>>
+    + exibir(): void
+    + verificarValido(): boolean
+    + estaCompleto(): boolean
+    + limparNaoFixos(): void
+    + getCelulas(): List<List<Celula>>
+}
+
+class Celula {
+    - valor: int
+    - fixa: boolean
+    - rascunhos: Set<int>
+    - esperado: int
+    + getValor(): int
+    + setValor(valor: int): void
+    + isFixa(): boolean
+    + adicionarRascunho(valor: int): void
+    + removerRascunho(valor: int): void
+    + limparRascunhos(): void
+    + getEsperado(): int
+}
+
+class Jogador {
+    - nome: String
+    + getNome(): String
+}
+
+class SudokuFrame <<Swing JFrame>> {
+    - jogo: Jogo
+    + main(args: String[]): void
+}
+
+class CelulaPanel <<Swing JPanel>> {
+    - celula: Celula
+}
+
+class NomeJogadorPanel <<Swing JPanel>> {
+    - campoNome: JTextField
+    + getNome(): String
+}
+
+class MatrizPanel <<Swing JPanel>> {
+    - rascunhosPorCelula: Map<Celula, Set<Integer>>
+    - jogo: Jogo
+}
+
+class TituloTabuleiroPanel <<Swing JPanel>> {
+    - errosLabel: JLabel
+    - btnRascunho: JButton
+}
+
+class RascunhoDotsPanel <<Swing JPanel>> {
+    - rascunhos: Set<Integer>
+}
+
+class NumberDocument <<Swing PlainDocument>> {
+}
+
+interface JogoEventListener {
+    + onEvent(eventType: JogoEventEnum, novoValor: int): void
+}
+
+enum JogoEventEnum {
+    TOGGLE_MODO_RASCUNHO
+    ADICIONAR_ERRO_AO_JOGO
+}
+
+Jogo "1" -- "1" Tabuleiro : gerencia
+Jogo "1" -- "1" Jogador : pertence
+Tabuleiro "1" -- "*" Celula : compõe
+SudokuFrame "1" -- "1" Jogo : controla
+SudokuFrame "1" -- "*" CelulaPanel : exibe
+CelulaPanel "1" -- "1" Celula : representa
+SudokuFrame "1" -- "1" NomeJogadorPanel : exibe
+NomeJogadorPanel "1" -- "1" Jogador : cria/atualiza
+SudokuFrame "1" -- "1" MatrizPanel : exibe
+SudokuFrame "1" -- "1" TituloTabuleiroPanel : exibe
+MatrizPanel "1" -- "*" RascunhoDotsPanel : usa
+MatrizPanel "1" -- "1" Jogo : consulta
+TituloTabuleiroPanel "1" -- "1" Jogo : consulta
+MatrizPanel "1" -- "*" Celula : referencia
+MatrizPanel  -->  NumberDocument : usa
+JogoEventListener <|.. MatrizPanel
+JogoEventListener <|.. TituloTabuleiroPanel
+@enduml
