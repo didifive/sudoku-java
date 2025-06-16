@@ -20,10 +20,6 @@ final public class Jogador {
         return nome;
     }
 
-    public void setNome(final String nome) {
-        this.nome = nome;
-    }
-
     public Long getId() {
         return id;
     }

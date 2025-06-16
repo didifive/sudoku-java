@@ -13,12 +13,4 @@ final public class Tabuleiro {
         return celulas;
     }
 
-    public Celula getCelula(final int linha, final int coluna) {
-        return celulas.get(linha).get(coluna);
-    }
-
-    public void setCelula(final int linha, final int coluna, final Celula celula) {
-        celulas.get(linha).set(coluna, celula);
-    }
-
 }

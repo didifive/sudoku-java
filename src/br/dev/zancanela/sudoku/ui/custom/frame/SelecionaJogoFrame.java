@@ -10,12 +10,11 @@ import br.dev.zancanela.sudoku.ui.custom.button.NovoJogoButton;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SelecionaJogoFrame extends JFrame {
     private final JogoService jogoService = new JogoService(new JogoRepository());
-    private Jogador jogador;
+    private final Jogador jogador;
 
     public SelecionaJogoFrame(Jogador jogador) {
         this.jogador = jogador;

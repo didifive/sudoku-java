@@ -13,8 +13,8 @@ import java.util.List;
 
 public class InicioFrame extends JFrame {
     private final JogadorService jogadorService = new JogadorService(new JogadorRepository());
-    private JComboBox<Jogador> comboJogadores;
-    private JTextField txtNovoJogador;
+    private final JComboBox<Jogador> comboJogadores;
+    private final JTextField txtNovoJogador;
 
     public InicioFrame() {
         setTitle("Sudoku - Seleção de Jogador");
