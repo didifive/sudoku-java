@@ -1,6 +1,6 @@
 package br.dev.zancanela.sudoku.repository;
 
-import br.dev.zancanela.sudoku.db.DatabaseUtil;
+import br.dev.zancanela.sudoku.util.DatabaseUtil;
 import br.dev.zancanela.sudoku.domain.model.Jogador;
 
 import java.sql.*;
@@ -38,7 +38,7 @@ public class JogadorRepository {
 
     public List<Jogador> listarTodos() {
         List<Jogador> jogadores = new ArrayList<>();
-        String sql = "SELECT * FROM jogador";
+        String sql = "SELECT id, nome FROM jogador";
         try (Connection conn = DatabaseUtil.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 jogadores.add(new Jogador(rs.getInt("id"), rs.getString("nome")));

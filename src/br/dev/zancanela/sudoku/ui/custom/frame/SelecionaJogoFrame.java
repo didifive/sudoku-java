@@ -5,7 +5,7 @@ import br.dev.zancanela.sudoku.domain.model.Jogo;
 import br.dev.zancanela.sudoku.domain.model.Tabuleiro;
 import br.dev.zancanela.sudoku.repository.JogoRepository;
 import br.dev.zancanela.sudoku.service.JogoService;
-import br.dev.zancanela.sudoku.service.TabuleiroService;
+import br.dev.zancanela.sudoku.util.TabuleiroUtil;
 import br.dev.zancanela.sudoku.ui.custom.button.NovoJogoButton;
 
 import javax.swing.*;
@@ -13,8 +13,8 @@ import java.awt.*;
 import java.util.List;
 
 public class SelecionaJogoFrame extends JFrame {
-    private final JogoService jogoService = new JogoService(new JogoRepository());
-    private final Jogador jogador;
+    private final transient JogoService jogoService = new JogoService(new JogoRepository());
+    private final transient Jogador jogador;
 
     public SelecionaJogoFrame(Jogador jogador) {
         this.jogador = jogador;
@@ -53,7 +53,7 @@ public class SelecionaJogoFrame extends JFrame {
     }
 
     private void iniciarNovoJogo() {
-        Tabuleiro tabuleiro = TabuleiroService.iniciaNovoTabuleiro();
+        Tabuleiro tabuleiro = TabuleiroUtil.iniciaNovoTabuleiro();
         Jogo novoJogo = jogoService.iniciarNovoJogo(jogador, tabuleiro);
         new SudokuFrame(novoJogo).setVisible(true);
         dispose();

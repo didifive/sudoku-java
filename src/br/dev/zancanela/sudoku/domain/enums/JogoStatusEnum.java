@@ -1,6 +1,6 @@
 package br.dev.zancanela.sudoku.domain.enums;
 
-public enum StatusJogoEnum {
+public enum JogoStatusEnum {
 
     NAO_INICIADO("Não Iniciado"),
     INCOMPLETO("Incompleto"),
@@ -8,7 +8,7 @@ public enum StatusJogoEnum {
 
     private final String label;
 
-    StatusJogoEnum(final String label){
+    JogoStatusEnum(final String label){
         this.label = label;
     }
 

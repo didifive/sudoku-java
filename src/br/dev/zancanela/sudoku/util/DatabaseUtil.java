@@ -1,4 +1,4 @@
-package br.dev.zancanela.sudoku.db;
+package br.dev.zancanela.sudoku.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,5 +9,9 @@ public class DatabaseUtil {
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL);
+    }
+
+    private DatabaseUtil () {
+        throw new UnsupportedOperationException("Esta classe utilitária não pode ser instanciada.");
     }
 }

@@ -1,184 +1,176 @@
 package br.dev.zancanela.sudoku.ui.custom.panel;
 
 import br.dev.zancanela.sudoku.domain.enums.JogoEventEnum;
+import br.dev.zancanela.sudoku.domain.enums.JogoStatusEnum;
 import br.dev.zancanela.sudoku.domain.event.JogoEventListener;
 import br.dev.zancanela.sudoku.domain.model.Celula;
 import br.dev.zancanela.sudoku.domain.model.Jogo;
+import br.dev.zancanela.sudoku.repository.JogoRepository;
+import br.dev.zancanela.sudoku.service.JogoService;
 import br.dev.zancanela.sudoku.ui.custom.input.NumberDocument;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 
-import static br.dev.zancanela.sudoku.domain.enums.JogoEventEnum.TOGGLE_MODO_RASCUNHO;
+import static br.dev.zancanela.sudoku.domain.enums.JogoEventEnum.*;
+import static br.dev.zancanela.sudoku.domain.enums.JogoStatusEnum.COMPLETO;
+import static br.dev.zancanela.sudoku.domain.enums.JogoStatusEnum.NAO_INICIADO;
+import static javax.swing.SwingConstants.CENTER;
 
 public class MatrizPanel extends JPanel implements JogoEventListener {
     private static final Font CELULA_FONTE = new Font("Arial", Font.BOLD, 24);
     private final Map<Celula, Set<Integer>> rascunhosPorCelula = new HashMap<>();
+    private final List<JTextField> camposEditaveis = new ArrayList<>();
+    private transient Jogo jogo;
+    private final transient JogoService jogoService;
 
     public MatrizPanel(Jogo jogo) {
-        configurarPainelPrincipal();
+        setPreferredSize(new Dimension(600, 600));
+        setLayout(new GridLayout(3, 3, 0, 0));
+        setBorder(new LineBorder(Color.DARK_GRAY, 3, true));
         jogo.addJogoEventListener(TOGGLE_MODO_RASCUNHO, this);
+        jogo.addJogoEventListener(JOGO_LIMPO, this);
+        jogo.addJogoEventListener(JOGO_MODIFICADO, this);
+        this.jogo = jogo;
+        this.jogoService = new JogoService(new JogoRepository());
         construirMatriz(jogo);
     }
 
-    private void configurarPainelPrincipal() {
-        Dimension dimension = new Dimension(600, 600);
-        setPreferredSize(dimension);
-        setMinimumSize(dimension);
-        setMaximumSize(dimension);
-        setLayout(new GridLayout(3, 3, 0, 0));
-        setBorder(new LineBorder(Color.DARK_GRAY, 3, true));
-    }
-
     private void construirMatriz(Jogo jogo) {
-        List<List<Celula>> matriz = jogo.getTabuleiro().getCelulas();
-        for (int blocoLin = 0; blocoLin < 3; blocoLin++) {
+        var matriz = jogo.getTabuleiro().celulas();
+        for (int blocoLin = 0; blocoLin < 3; blocoLin++)
             for (int blocoCol = 0; blocoCol < 3; blocoCol++) {
-                JPanel bloco = criarBlocoPanel();
-                for (int lin = 0; lin < 3; lin++) {
+                JPanel bloco = new JPanel(new GridLayout(3, 3));
+                bloco.setBorder(new LineBorder(Color.BLACK, 1, true));
+                for (int lin = 0; lin < 3; lin++)
                     for (int col = 0; col < 3; col++) {
-                        int globalLin = blocoLin * 3 + lin;
-                        int globalCol = blocoCol * 3 + col;
-                        Celula celula = matriz.get(globalLin).get(globalCol);
+                        int gl = blocoLin * 3 + lin, gc = blocoCol * 3 + col;
+                        Celula celula = matriz.get(gl).get(gc);
                         bloco.add(criarCelulaPanel(celula, jogo));
                     }
-                }
                 add(bloco);
+            }
+    }
+
+    @Override
+    public void onEvent(JogoEventEnum eventType, int novoValor) {
+        switch (eventType) {
+            case TOGGLE_MODO_RASCUNHO -> repaint();
+            case JOGO_LIMPO -> {
+                for (var campo : camposEditaveis) {
+                    campo.setText("");
+                    campo.setForeground(Color.BLACK);
+                }
+                repaint();
+            }
+            case JOGO_MODIFICADO -> {
+                if(NAO_INICIADO.equals(jogo.getStatus())) {
+                    jogo.setStatusIniciado();
+                }
+                if(COMPLETO.equals(jogo.getStatus())) {
+                    for (var campo : camposEditaveis) {
+                        campo.setEditable(false);
+                        campo.setFocusable(false);
+                    }
+                }
+                this.jogo = jogoService.atualizarJogo(jogo);
+                repaint();
+            }
+            default -> {
+                // Nada a fazer
             }
         }
     }
 
-    private JPanel criarBlocoPanel() {
-        JPanel bloco = new JPanel(new GridLayout(3, 3));
-        bloco.setBorder(new LineBorder(Color.BLACK, 1, true));
-        return bloco;
-    }
-
-    @Override
-    public void onEvent(JogoEventEnum eventType,
-                        int novoValor) {
-        if (eventType == TOGGLE_MODO_RASCUNHO) {
-            repaint();
-        }
-    }
-
-    private JComponent criarCelulaPanel(Celula celula,
-                                        Jogo jogo) {
-        JPanel overlayPanel = new JPanel();
-        overlayPanel.setLayout(new OverlayLayout(overlayPanel));
-        overlayPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 1));
+    private JComponent criarCelulaPanel(Celula celula, Jogo jogo) {
+        JPanel overlay = new JPanel();
+        overlay.setLayout(new OverlayLayout(overlay));
+        overlay.setBorder(new LineBorder(Color.LIGHT_GRAY, 1));
 
         JTextField campo = criarCampoCelula(celula);
+
         Set<Integer> rascunhos = rascunhosPorCelula.computeIfAbsent(celula, c -> new HashSet<>());
-        RascunhoDotsPanel dotsPanel = new RascunhoDotsPanel(rascunhos);
-        dotsPanel.setOpaque(false);
-        dotsPanel.setVisible(true);
+        RascunhoDotsPanel dots = new RascunhoDotsPanel(rascunhos);
+        dots.setOpaque(false);
 
-        campo.addKeyListener(criarKeyListenerCelula(campo, celula, jogo, rascunhos, dotsPanel, overlayPanel));
-        campo.addMouseListener(criarMouseListenerCelula(rascunhos, dotsPanel, overlayPanel));
-
-        overlayPanel.add(campo, 0);
-        overlayPanel.add(dotsPanel, 1);
-
-        return overlayPanel;
-    }
-
-    private JTextField criarCampoCelula(Celula celula) {
-        JTextField campo = new JTextField();
-        campo.setHorizontalAlignment(JTextField.CENTER);
-        campo.setFont(CELULA_FONTE);
-        campo.setBorder(BorderFactory.createEmptyBorder());
-        campo.setOpaque(false);
-        campo.setBackground(new Color(0, 0, 0, 0));
-
-        if (celula.isFixa()) {
-            campo.setForeground(Color.DARK_GRAY);
-            campo.setBackground(new Color(230, 230, 230));
-            campo.setFocusable(false);
-            campo.setEditable(false);
-        } else {
-            campo.setForeground(Color.BLACK);
-            campo.setDocument(new NumberDocument());
-        }
-        campo.setText(celula.getValor() != 0 ? String.valueOf(celula.getValor()) : "");
-        return campo;
-    }
-
-    private KeyAdapter criarKeyListenerCelula(JTextField campo,
-                                              Celula celula,
-                                              Jogo jogo,
-                                              Set<Integer> rascunhos,
-                                              RascunhoDotsPanel dotsPanel,
-                                              JPanel overlayPanel) {
-        return new KeyAdapter() {
+        campo.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
                 if (Character.isDigit(c) && c != '0') {
                     int valor = Character.getNumericValue(c);
                     if (jogo.isModoRascunho()) {
-                        alternarRascunho(rascunhos, valor);
+                        if (!rascunhos.add(valor)) rascunhos.remove(valor);
                         campo.setText("");
-                        atualizarDotsPanel(dotsPanel, rascunhos, overlayPanel);
+                        atualizarDotsPanel(dots, rascunhos, overlay);
                         e.consume();
                     } else {
-                        processarValorCelula(campo, celula, valor, jogo);
-                        atualizarDotsPanel(dotsPanel, rascunhos, overlayPanel);
+                        celula.setValor(valor);
+                        campo.setText(String.valueOf(valor));
+                        if (celula.getEsperado() == valor) {
+                            campo.setForeground(Color.BLACK);
+                        } else {
+                            campo.setForeground(Color.RED);
+                            jogo.incrementarErro();
+                        }
+                        jogo.getNotifier().notify(JOGO_MODIFICADO, 0);
+                        atualizarDotsPanel(dots, rascunhos, overlay);
                     }
                 }
             }
-        };
-    }
+        });
 
-    private void alternarRascunho(Set<Integer> rascunhos,
-                                  int valor) {
-        if (rascunhos.contains(valor)) {
-            rascunhos.remove(valor);
-        } else {
-            rascunhos.add(valor);
-        }
-    }
-
-    private void processarValorCelula(JTextField campo,
-                                      Celula celula,
-                                      int valor,
-                                      Jogo jogo) {
-        if (celula.getEsperado() == valor) {
-            celula.setValor(valor);
-            campo.setText(String.valueOf(valor));
-            campo.setForeground(Color.BLACK);
-        } else {
-            campo.setForeground(Color.RED);
-            jogo.incrementarErro();
-        }
-    }
-
-    private void atualizarDotsPanel(RascunhoDotsPanel dotsPanel,
-                                    Set<Integer> rascunhos,
-                                    JPanel overlayPanel) {
-        dotsPanel.setRascunhos(rascunhos);
-        overlayPanel.revalidate();
-        overlayPanel.repaint();
-    }
-
-    private MouseAdapter criarMouseListenerCelula(Set<Integer> rascunhos,
-                                                  RascunhoDotsPanel dotsPanel,
-                                                  JPanel overlayPanel) {
-        return new MouseAdapter() {
+        campo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isRightMouseButton(e)) {
                     rascunhos.clear();
-                    atualizarDotsPanel(dotsPanel, rascunhos, overlayPanel);
+                    atualizarDotsPanel(dots, rascunhos, overlay);
                 }
             }
-        };
+        });
+
+        overlay.add(campo, 0);
+        overlay.add(dots, 1);
+        return overlay;
+    }
+
+    private JTextField criarCampoCelula(Celula celula) {
+        JTextField campo = new JTextField();
+        campo.setHorizontalAlignment(CENTER);
+        campo.setFont(CELULA_FONTE);
+        campo.setBorder(BorderFactory.createEmptyBorder());
+        campo.setOpaque(false);
+        campo.setBackground(new Color(0, 0, 0, 0));
+        if (celula.isFixa()) {
+            campo.setForeground(Color.DARK_GRAY);
+            campo.setBackground(new Color(215, 215, 215));
+            campo.setFocusable(false);
+            campo.setEditable(false);
+        } else {
+            if(celula.getValor() != celula.getEsperado()) {
+                campo.setForeground(Color.RED);
+            } else {
+                campo.setForeground(Color.BLACK);
+            }
+            campo.setDocument(new NumberDocument());
+            if (JogoStatusEnum.COMPLETO.equals(jogo.getStatus())) {
+                campo.setEditable(false);
+                campo.setFocusable(false);
+            }
+            camposEditaveis.add(campo);
+        }
+        campo.setText(celula.getValor() != 0 ? String.valueOf(celula.getValor()) : "");
+        return campo;
+    }
+
+    private void atualizarDotsPanel(RascunhoDotsPanel dots, Set<Integer> rascunhos, JPanel overlay) {
+        dots.setRascunhos(rascunhos);
+        overlay.revalidate();
+        overlay.repaint();
     }
 }

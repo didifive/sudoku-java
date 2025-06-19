@@ -19,8 +19,8 @@ public class JogoService {
         return jogoRepository.salvar(jogo);
     }
 
-    public Jogo carregarJogo(final Long id) {
-        return jogoRepository.carregar(id);
+    public Jogo atualizarJogo(final Jogo jogo) {
+        return jogoRepository.salvar(jogo);
     }
 
     public List<Jogo> listarJogosByJogador(Jogador jogador) {

@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 
 public class InicioFrame extends JFrame {
-    private final JogadorService jogadorService = new JogadorService(new JogadorRepository());
+    private final transient JogadorService jogadorService = new JogadorService(new JogadorRepository());
     private final JComboBox<Jogador> comboJogadores;
     private final JTextField txtNovoJogador;
 

@@ -1,6 +1,6 @@
 package br.dev.zancanela.sudoku.domain.model;
 
-final public class Celula {
+public final class Celula {
     private final boolean fixa;
     private final int esperado;
     private int valor;

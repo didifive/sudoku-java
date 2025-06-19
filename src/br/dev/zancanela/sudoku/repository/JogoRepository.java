@@ -1,6 +1,6 @@
 package br.dev.zancanela.sudoku.repository;
 
-import br.dev.zancanela.sudoku.db.DatabaseUtil;
+import br.dev.zancanela.sudoku.util.DatabaseUtil;
 import br.dev.zancanela.sudoku.domain.model.Jogador;
 import br.dev.zancanela.sudoku.domain.model.Jogo;
 
@@ -29,7 +29,7 @@ public class JogoRepository {
     public Jogo salvar(final Jogo jogo) {
         String sql = "REPLACE INTO jogo(id, jogador_id, estado) VALUES(?, ?, ?)";
         try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            if (jogo.getId() != null) {
+            if (jogo.getId() != null && jogo.getId() > 0) {
                 pstmt.setLong(1, jogo.getId());
             } else {
                 pstmt.setNull(1, java.sql.Types.INTEGER);
@@ -37,42 +37,30 @@ public class JogoRepository {
             pstmt.setLong(2, jogo.getJogador().getId());
             pstmt.setString(3, jogo.serializar());
             pstmt.executeUpdate();
-            if (jogo.getId() == null) {
+            if (jogo.getId() == null || jogo.getId() == 0) {
                 try (ResultSet rs = pstmt.getGeneratedKeys()) {
                     if (rs.next()) {
                         jogo.setId(rs.getLong(1));
                     }
                 }
             }
-            return carregar(jogo.getJogador().getId());
+            return jogo;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
     }
-
-    public Jogo carregar(final Long jogadorId) {
-        String sql = "SELECT estado FROM jogo WHERE jogador_id = ?";
-        try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setLong(1, jogadorId);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return Jogo.deserializar(rs.getString("estado"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public List<Jogo> listarJogosByJogador(Jogador jogador) {
+    public List<Jogo> listarJogosByJogador(final Jogador jogador) {
         List<Jogo> jogos = new ArrayList<>();
-        String sql = "SELECT estado FROM jogo WHERE jogador_id = ?";
+        String sql = "SELECT id, estado FROM jogo WHERE jogador_id = ?";
         try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setLong(1, jogador.getId());
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                jogos.add(Jogo.deserializar(rs.getString("estado")));
+                Jogo jogo = Jogo.deserializar(rs.getString("estado"));
+                jogo.setJogador(jogador);
+                jogo.setId(rs.getLong("id"));
+                jogos.add(jogo);
             }
         } catch (SQLException e) {
             e.printStackTrace();

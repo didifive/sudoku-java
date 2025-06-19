@@ -15,7 +15,7 @@ o estado do jogo e fornecer feedback sobre erros.
 - SQLite
 
 ### 🚀 Desafio
-Descrição completa do Desafio: [Desafio Sudoku Java]
+Descrição base e completa do Desafio: [Desafio Sudoku Java]
 
 #### 📋 Requisitos
 Deve-se ter um menu interativo onde poderemos escolher entre as seguintes opções:
@@ -38,6 +38,30 @@ Deve-se ter um menu interativo onde poderemos escolher entre as seguintes opçõ
 ![rascunho](docs/images/draft.png)
 
 ## 🖼️ Visuais
+
+### 🖥️ Tela Inicial
+#### Tela Inicial do Jogo sem Jogador
+![Tela Inicial Sem Jogador](docs/images/inicio-frame-sem-jogador.png)
+
+#### Tela Inicial do Jogo quando já existe um Jogador
+![Tela Inicial](docs/images/inicio-frame.png)
+
+### 📜 Tela de Seleção de Jogo
+#### Tela de Seleção de Jogo sem nenhum jogo
+![Seleção de Jogos Sem Jogo](docs/images/seleciona-jogo-frame-sem-jogo.png)
+
+#### Tela de Seleção de Jogo com jogos salvos
+![Seleção de Jogos](docs/images/seleciona-jogo-frame.png)
+
+### 🕹️ Tela de Jogo
+#### Tela de Novo Jogo Iniciado
+![Novo Jogo Iniciado](docs/images/sudoku-frame-novo-jogo-iniciado.png)
+
+#### Tela de Jogo com Números Preenchidos e erros contabilizados e apontados
+![Jogo com Números Preenchidos](docs/images/sudoku-frame-jogo-com-numeros-preenchidos.png)
+
+#### Tela de Jogo com Jogo Completo
+![Jogo Completo](docs/images/sudoku-frame-jogo-completo.png)
 
 ### 📐 Diagrama de Classes
 ![Diagrama de Classes](docs/images/class-diagram.png)  
@@ -72,10 +96,9 @@ Abaixo seguem as instruções para executar o projeto com o banco de dados SQLit
 3. **O banco de dados será criado automaticamente**  
    - O arquivo `sudoku.db` será gerado na raiz do projeto ao rodar a aplicação pela primeira vez.
 
-
-
+    
 ---
-Criado com paixão, dedicação e o compromisso sincero de compartilhar conhecimento 🧑‍💻❤️🤝📚
+Criado com apoio do GitHub Copilot 🤖, paixão ❤️, dedicação 💪 e o compromisso sincero de aprender 📚 e compartilhar conhecimento 🌍
 
 
 [DIO]: https://www.dio.me/sign-up?ref=WQ0TRWQ8E1

@@ -1,4 +1,4 @@
-package br.dev.zancanela.sudoku.service;
+package br.dev.zancanela.sudoku.util;
 
 import br.dev.zancanela.sudoku.domain.model.Celula;
 import br.dev.zancanela.sudoku.domain.model.Tabuleiro;
@@ -12,7 +12,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class TabuleiroService {
+public class TabuleiroUtil {
+
+    private static final Random RANDOM = new Random();
 
     public static Tabuleiro iniciaNovoTabuleiro() {
         List<List<Celula>> celulas = new ArrayList<>();
@@ -53,12 +55,10 @@ public class TabuleiroService {
         };
         fill.apply(new int[]{0, 0});
 
-        // Definir células fixas aleatórias
-        Random rand = new Random();
         boolean[][] fixa = new boolean[9][9];
         int fixas = 25; // quantidade de células fixas
         while (fixas > 0) {
-            int i = rand.nextInt(9), j = rand.nextInt(9);
+            int i = RANDOM.nextInt(9), j = RANDOM.nextInt(9);
             if (!fixa[i][j]) {
                 fixa[i][j] = true;
                 fixas--;
@@ -80,14 +80,7 @@ public class TabuleiroService {
 
     }
 
-    public static boolean verificarIniciado(Tabuleiro tabuleiro) {
-        long celulasFixas = tabuleiro.getCelulas().stream().flatMap(List::stream)
-                .filter(Celula::isFixa)
-                .count();
-        long celulasPreenchidas = tabuleiro.getCelulas().stream().flatMap(List::stream)
-                .filter(celula -> !celula.isFixa() && celula.getValor() != 0)
-                .count();
-
-        return celulasFixas > 0 && celulasPreenchidas > 0;
+    private TabuleiroUtil() {
+        throw new UnsupportedOperationException("Esta classe utilitária não pode ser instanciada.");
     }
 }

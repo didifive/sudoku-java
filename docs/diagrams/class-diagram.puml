@@ -6,6 +6,7 @@ enum StatusJogoEnum {
 }
 
 class Jogo {
+    - id: Long
     - tabuleiro: Tabuleiro
     - jogador: Jogador
     - status: StatusJogoEnum
@@ -23,6 +24,10 @@ class Jogo {
     + isModoRascunho(): boolean
     + setModoRascunho(boolean): void
     + addJogoEventListener(event: JogoEventEnum, listener: JogoEventListener): void
+    + serializar(): String
+    + static deserializar(estado: String): Jogo
+    + setId(id: Long): void
+    + getId(): Long
 }
 
 class Tabuleiro {
@@ -32,6 +37,7 @@ class Tabuleiro {
     + estaCompleto(): boolean
     + limparNaoFixos(): void
     + getCelulas(): List<List<Celula>>
+    + celulas(): List<List<Celula>>
 }
 
 class Celula {
@@ -49,7 +55,9 @@ class Celula {
 }
 
 class Jogador {
+    - id: Long
     - nome: String
+    + getId(): Long
     + getNome(): String
 }
 
@@ -70,6 +78,7 @@ class NomeJogadorPanel <<Swing JPanel>> {
 class MatrizPanel <<Swing JPanel>> {
     - rascunhosPorCelula: Map<Celula, Set<Integer>>
     - jogo: Jogo
+    - jogoService: JogoService
 }
 
 class TituloTabuleiroPanel <<Swing JPanel>> {
@@ -84,11 +93,33 @@ class RascunhoDotsPanel <<Swing JPanel>> {
 class NumberDocument <<Swing PlainDocument>> {
 }
 
+class JogoService {
+    - repository: JogoRepository
+    + atualizarJogo(jogo: Jogo): void
+}
+
+class JogoRepository {
+    + salvar(jogo: Jogo): void
+    + buscarPorId(id: Long): Jogo
+}
+
+class JogadorService {
+    - repository: JogadorRepository
+    + salvar(jogador: Jogador): void
+    + buscarPorId(id: Long): Jogador
+}
+
+class JogadorRepository {
+    + salvar(jogador: Jogador): void
+    + buscarPorId(id: Long): Jogador
+}
+
 interface JogoEventListener {
     + onEvent(eventType: JogoEventEnum, novoValor: int): void
 }
 
 enum JogoEventEnum {
+    JOGO_MODIFICADO
     TOGGLE_MODO_RASCUNHO
     ADICIONAR_ERRO_AO_JOGO
 }
@@ -105,9 +136,14 @@ SudokuFrame "1" -- "1" MatrizPanel : exibe
 SudokuFrame "1" -- "1" TituloTabuleiroPanel : exibe
 MatrizPanel "1" -- "*" RascunhoDotsPanel : usa
 MatrizPanel "1" -- "1" Jogo : consulta
+MatrizPanel "1" -- "1" JogoService : usa
 TituloTabuleiroPanel "1" -- "1" Jogo : consulta
 MatrizPanel "1" -- "*" Celula : referencia
 MatrizPanel  -->  NumberDocument : usa
+JogoService "1" -- "1" JogoRepository : usa
+JogoRepository "1" -- "*" Jogo : gerencia
+JogadorService "1" -- "1" JogadorRepository : usa
+JogadorRepository "1" -- "1" Jogador : gerencia
 JogoEventListener <|.. MatrizPanel
 JogoEventListener <|.. TituloTabuleiroPanel
 @enduml

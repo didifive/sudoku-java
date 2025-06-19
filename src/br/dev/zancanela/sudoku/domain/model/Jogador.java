@@ -1,6 +1,6 @@
 package br.dev.zancanela.sudoku.domain.model;
 
-final public class Jogador {
+public final class Jogador {
     private Long id;
     private String nome;
 
