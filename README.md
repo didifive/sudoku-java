@@ -37,6 +37,19 @@ Deve-se ter um menu interativo onde poderemos escolher entre as seguintes opçõ
 ##### 📝 Modelo de rascunho
 ![rascunho](docs/images/draft.png)
 
+## 🏆 Atendimento aos Requisitos e Diferenciais
+O projeto implementa todos os requisitos obrigatórios e extras propostos no desafio, além de ter diferenciais:
+
+- Todos os requisitos obrigatórios foram implementados: o menu interativo permite iniciar um novo jogo, inserir e 
+remover números, verificar o estado e status do jogo, limpar o tabuleiro e finalizar a partida.
+- Também foram atendidos os requisitos extras: o tabuleiro é gerado dinamicamente a cada nova partida, o sistema de rascunho
+está disponível para adicionar/remover possíveis valores (rascunhos) em cada célula, e a interface gráfica foi desenvolvida com Swing.
+- **Como diferenciais além dos requisitos, o projeto permite cadastrar, selecionar e persistir jogadores, associando cada partida
+a um usuário, e salva tanto o progresso do jogo quanto os dados do jogador no banco de dados SQLite, possibilitando retomar partidas
+e manter o histórico.**
+
+Esses diferenciais tornam o projeto mais completo, dinâmico e próximo de uma aplicação real de Sudoku.
+
 ## 🖼️ Visuais
 
 ### 🖥️ Tela Inicial
