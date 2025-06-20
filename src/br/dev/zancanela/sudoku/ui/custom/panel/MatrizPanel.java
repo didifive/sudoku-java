@@ -65,6 +65,7 @@ public class MatrizPanel extends JPanel implements JogoEventListener {
                     campo.setText("");
                     campo.setForeground(Color.BLACK);
                 }
+                this.jogo = jogoService.atualizarJogo(jogo);
                 repaint();
             }
             case JOGO_MODIFICADO -> {

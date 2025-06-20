@@ -7,8 +7,10 @@ import br.dev.zancanela.sudoku.ui.custom.frame.SelecionaJogoFrame;
 import javax.swing.*;
 import java.awt.*;
 
+import static br.dev.zancanela.sudoku.domain.enums.JogoEventEnum.JOGO_MODIFICADO;
+
 public class RodapeTabuleiroPanel extends JPanel {
-    private final JButton btnEncerrar = new JButton("Finalizar Jogo");
+
     private final JLabel parabensLabel = new JLabel("Parabéns! Sudoku concluído.");
 
     public RodapeTabuleiroPanel(Jogo jogo) {
@@ -28,12 +30,15 @@ public class RodapeTabuleiroPanel extends JPanel {
         JButton btnLimpar = new JButton("Limpar");
         btnLimpar.addActionListener(e -> jogo.limparCelulasNaoFixas());
 
+        JButton btnEncerrar = new JButton("Finalizar Jogo");
         btnEncerrar.addActionListener(e -> {
             if (jogo.verificarTabuleiro()) {
                 jogo.setStatusConcluido();
                 btnEncerrar.setVisible(false);
                 btnLimpar.setVisible(false);
                 parabensLabel.setVisible(true);
+                jogo.setStatusConcluido();
+                jogo.getNotifier().notify(JOGO_MODIFICADO, 0);
             } else {
                 JOptionPane.showMessageDialog(this, "Ainda há erros ou células vazias.");
             }
@@ -58,6 +63,7 @@ public class RodapeTabuleiroPanel extends JPanel {
         add(parabensLabel, gbc);
 
         if (JogoStatusEnum.COMPLETO.equals(jogo.getStatus())) {
+            btnLimpar.setVisible(false);
             btnEncerrar.setVisible(false);
             parabensLabel.setVisible(true);
         }
