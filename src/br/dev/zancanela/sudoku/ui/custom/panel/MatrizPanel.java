@@ -101,9 +101,16 @@ public class MatrizPanel extends JPanel implements JogoEventListener {
             @Override
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
-                if (Character.isDigit(c) && c != '0') {
+                if (Character.isDigit(c)) {
                     int valor = Character.getNumericValue(c);
-                    if (jogo.isModoRascunho()) {
+                    if (valor == 0) {
+                        celula.setValor(0);
+                        campo.setText("");
+                        campo.setForeground(Color.BLACK);
+                        jogo.getNotifier().notify(JOGO_MODIFICADO, 0);
+                        atualizarDotsPanel(dots, rascunhos, overlay);
+                        e.consume();
+                    } else if (jogo.isModoRascunho()) {
                         if (!rascunhos.add(valor)) rascunhos.remove(valor);
                         campo.setText("");
                         atualizarDotsPanel(dots, rascunhos, overlay);
@@ -120,6 +127,12 @@ public class MatrizPanel extends JPanel implements JogoEventListener {
                         jogo.getNotifier().notify(JOGO_MODIFICADO, 0);
                         atualizarDotsPanel(dots, rascunhos, overlay);
                     }
+                } else if (c == '\b' || c == KeyEvent.VK_DELETE) {
+                    celula.setValor(0);
+                    campo.setText("");
+                    campo.setForeground(Color.BLACK);
+                    jogo.getNotifier().notify(JOGO_MODIFICADO, 0);
+                    atualizarDotsPanel(dots, rascunhos, overlay);
                 }
             }
         });
