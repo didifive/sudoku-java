@@ -79,9 +79,6 @@ Esses diferenciais tornam o projeto mais completo, dinâmico e próximo de uma a
 #### Tela de Jogo com mensagem de erro ao tentar finalizar o jogo sem estar completo ou ainda estar com erro
 ![Jogo Mensagem de Erro](docs/images/sudoku-frame-jogo-com-numeros-preenchidos-com-erro.png)
 
-#### Tela de Jogo com mensagem de erro ao tentar finalizar o jogo sem estar completo ou ainda estar com erro
-![Jogo com Números Preenchidos](docs/images/sudoku-frame-jogo-com-numeros-preenchidos-com-erro.png)
-
 #### Tela de Jogo com Jogo Completo
 ![Jogo Completo](docs/images/sudoku-frame-jogo-completo.png)
 
