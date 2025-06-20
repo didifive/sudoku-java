@@ -58,7 +58,13 @@ Deve-se ter um menu interativo onde poderemos escolher entre as seguintes opçõ
 ![Novo Jogo Iniciado](docs/images/sudoku-frame-novo-jogo-iniciado.png)
 
 #### Tela de Jogo com Números Preenchidos e erros contabilizados e apontados
-![Jogo com Números Preenchidos](docs/images/sudoku-frame-jogo-com-numeros-preenchidos.png)
+![Jogo com Números Preenchidos com Erros](docs/images/sudoku-frame-jogo-com-numeros-preenchidos.png)
+
+#### Tela de Jogo com Rascunhos
+![Jogo com Rascunhos](docs/images/sudoku-frame-jogo-com-rascunhos.png)
+
+#### Tela de Jogo com mensagem de erro ao tentar finalizar o jogo sem estar completo ou ainda estar com erro
+![Jogo Mensagem de Erro](docs/images/sudoku-frame-jogo-com-numeros-preenchidos-com-erro.png)
 
 #### Tela de Jogo com Jogo Completo
 ![Jogo Completo](docs/images/sudoku-frame-jogo-completo.png)
